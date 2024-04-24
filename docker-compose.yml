@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+
+  mysql:
+    image: mysql:8.0.31
+    restart: always
+    container_name: 'database-mysql'
+    environment:
+      MYSQL_DATABASE: 'restaurants'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+
+  app:
+    container_name: 'app-backend'
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '5050:5050'
+    environment:
+      PORT: 5050
+    depends_on:
+      - mysql
+    stdin_open: true
+    tty: true
