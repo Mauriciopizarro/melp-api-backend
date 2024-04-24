@@ -33,13 +33,31 @@ class RestaurantRepo(RestaurantRepository):
         restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
         return Restaurant(**restaurant_db.__dict__)
 
-    def save(self, restaurant: Restaurant):
+    def save(self, restaurant: Restaurant) -> str:
         session = Session(self.engine)
         restaurant_db = RestaurantDb(**restaurant.dict())
         session.add(restaurant_db)
         session.commit()
         session.refresh(restaurant_db)
         session.close()
+        return restaurant_db.id
+
+    def update(self, restaurant: Restaurant, restaurant_id):
+        session = Session(self.engine)
+        restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
+        restaurant_db.rating = restaurant.rating
+        restaurant_db.name = restaurant.name
+        restaurant_db.site = restaurant.site
+        restaurant_db.email = restaurant.email
+        restaurant_db.phone = restaurant.phone
+        restaurant_db.street = restaurant.street
+        restaurant_db.city = restaurant.city
+        restaurant_db.state = restaurant.state
+        restaurant_db.latitude = restaurant.latitude
+        restaurant_db.longitude = restaurant.longitude
+        session.commit()
+        session.close()
+        return restaurant
 
 class RestaurantDb(Base):
     __tablename__ = 'restaurant'
