@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException
-from application.services.save_restaurant_service import SaveRestaurantService
 from pydantic import BaseModel, Field, EmailStr
+from application.services.update_restaurant_service import UpdateRestaurantService
 
 router = APIRouter()
-save_restaurant_service = SaveRestaurantService()
+update_restaurant_service = UpdateRestaurantService()
 
 
-class SaveRestaurantRequestDataModel(BaseModel):
+class UpdateRestaurantRequestDataModel(BaseModel):
     rating: int = Field(ge=1, le=4)
     email: EmailStr
     name: str
@@ -18,8 +18,8 @@ class SaveRestaurantRequestDataModel(BaseModel):
     latitude: float
     longitude: float
 
-@router.post("/restaurants/save")
-async def save_restaurant(request: SaveRestaurantRequestDataModel):
+@router.post("/restaurants/update/{restaurant_id}")
+async def update_restaurant(request: UpdateRestaurantRequestDataModel, restaurant_id):
     try:
         restaurant_json = {
             'rating': request.rating,
@@ -33,13 +33,13 @@ async def save_restaurant(request: SaveRestaurantRequestDataModel):
             'latitude': request.latitude,
             'longitude': request.longitude
         }
-        restaurant_id = save_restaurant_service.save_restaurant(restaurant_json)
+        restaurant = update_restaurant_service.update_restaurant(restaurant_json, restaurant_id)
         response = {
-            'message': 'Restaurant successfully created',
-            'restaurant_id': restaurant_id
+            'message': 'Restaurant successfully updated',
+            'restaurant_data': restaurant.dict()
         }
         return response
     except Exception:
         raise HTTPException(
-            status_code=404, detail='Error saving a new restaurant',
+            status_code=404, detail='Error updating a new restaurant',
         )

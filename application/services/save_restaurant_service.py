@@ -8,4 +8,4 @@ class SaveRestaurantService:
 
     def save_restaurant(self, restaurant_data):
         restaurant = Restaurant(**restaurant_data)
-        self.restaurant_repo.save(restaurant)
+        return self.restaurant_repo.save(restaurant)
