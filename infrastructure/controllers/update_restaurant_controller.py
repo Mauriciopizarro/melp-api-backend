@@ -18,7 +18,7 @@ class UpdateRestaurantRequestDataModel(BaseModel):
     latitude: float
     longitude: float
 
-@router.post("/restaurants/update/{restaurant_id}")
+@router.put("/restaurants/update/{restaurant_id}")
 async def update_restaurant(request: UpdateRestaurantRequestDataModel, restaurant_id):
     try:
         restaurant_json = {

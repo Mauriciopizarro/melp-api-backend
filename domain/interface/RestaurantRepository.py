@@ -15,3 +15,7 @@ class RestaurantRepository(ABC):
     @abstractmethod
     def update(self, restaurant_id: str, restaurant: Restaurant) -> Restaurant:
         pass
+
+    @abstractmethod
+    def delete(self, restaurant_id: str):
+        pass
