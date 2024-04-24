@@ -59,6 +59,14 @@ class RestaurantRepo(RestaurantRepository):
         session.close()
         return restaurant
 
+    def delete(self, restaurant_id: str):
+        session = Session(self.engine)
+        restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
+        if restaurant_db:
+            session.delete(restaurant_db)
+            session.commit()
+        session.close()
+
 class RestaurantDb(Base):
     __tablename__ = 'restaurant'
 
