@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, CheckConstraint, create_engine, selec
 from sqlalchemy.sql.sqltypes import String, Integer, BOOLEAN, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, Session
-from domain.interface.RestaurantRepository import RestaurantRepository
+from domain.interface.restaurant_repository import RestaurantRepository
 from domain.models.Restaurant import Restaurant
 
 Base = declarative_base()
