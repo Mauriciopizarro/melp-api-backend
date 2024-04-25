@@ -12,5 +12,6 @@ injector.wire(modules=[
     "application.services.get_restaurant_service",
     "application.services.delete_restaurant_service",
     "application.services.save_restaurant_service",
-    "application.services.update_restaurant_service"
+    "application.services.update_restaurant_service",
+    "application.services.restaurants_statistics_service"
 ])

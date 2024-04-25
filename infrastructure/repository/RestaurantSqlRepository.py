@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, ForeignKey, CheckConstraint, create_engine, select
+from sqlalchemy import Column, ForeignKey, CheckConstraint, create_engine, select, func, literal_column
 from sqlalchemy.sql.sqltypes import String, Integer, BOOLEAN, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, Session
@@ -67,6 +67,22 @@ class RestaurantRepo(RestaurantRepository):
             session.commit()
         session.close()
 
+    def get_rest_by_lat_long_and_radius(self, latitude, longitude, radius):
+        session = Session(self.engine)
+        results = session.query(
+            RestaurantDb.id,
+            RestaurantDb.rating,
+            RestaurantDb.latitude,
+            RestaurantDb.longitude).filter(
+            (6371000 * func.acos(
+                func.cos(func.radians(latitude)) * func.cos(func.radians(RestaurantDb.latitude)) *
+                func.cos(func.radians(RestaurantDb.longitude) - func.radians(longitude)) +
+                func.sin(func.radians(latitude)) * func.sin(func.radians(RestaurantDb.latitude)))
+             ) <= radius
+        ).all()
+
+        return results
+
 class RestaurantDb(Base):
     __tablename__ = 'restaurant'
 
@@ -79,5 +95,5 @@ class RestaurantDb(Base):
     street = Column("street", String(255))
     city = Column("city", String(255))
     state = Column("state", String(255))
-    latitude = Column("latitude", Float)
-    longitude = Column("longitude", Float)
+    latitude = Column("lat", Float)
+    longitude = Column("lng", Float)

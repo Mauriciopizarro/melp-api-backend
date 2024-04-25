@@ -4,7 +4,7 @@ from typing import Optional
 class Restaurant(BaseModel):
 
     id: Optional[str]
-    rating: int = Field(ge=1, le=4)
+    rating: int = Field(ge=0, le=4)
     email: EmailStr
     name: str
     site: str
