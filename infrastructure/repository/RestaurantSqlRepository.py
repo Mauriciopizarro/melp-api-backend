@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, Session
 from domain.interface.restaurant_repository import RestaurantRepository
 from domain.models.Restaurant import Restaurant
+from config import settings
 
 Base = declarative_base()
 
@@ -24,7 +25,7 @@ class RestaurantRepo(RestaurantRepository):
 
     @staticmethod
     def get_database():
-        engine = create_engine('mysql+pymysql://user:password@mysql/restaurants')
+        engine = create_engine(f'mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}/{settings.DB_NAME}')
         Base.metadata.create_all(engine)
         return engine
 
