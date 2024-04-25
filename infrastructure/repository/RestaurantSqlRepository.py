@@ -25,7 +25,7 @@ class RestaurantRepo(RestaurantRepository):
 
     @staticmethod
     def get_database():
-        engine = create_engine(f'mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}/{settings.DB_NAME}')
+        engine = create_engine(settings.MYSQL_URL)
         Base.metadata.create_all(engine)
         return engine
 
