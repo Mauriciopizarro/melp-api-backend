@@ -13,7 +13,10 @@ class StatisticsRestaurantsService:
         data = self.restaurant_repo.get_rest_by_lat_long_and_radius(latitude, longitude, radius)
         ratings = [restaurant.rating for restaurant in data]
         count = len(data)
-        avg = sum(ratings) / len(ratings)
+        if data:
+            avg = sum(ratings) / len(ratings)
+        else:
+            avg = 0
         if count < 2:
             stv = 'Unable to calculate the standard deviation because there were not enough points (less than 2) found to compute it.'
         else:
