@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, CheckConstraint, create_engine, selec
 from sqlalchemy.sql.sqltypes import String, Integer, BOOLEAN, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, Session
+from domain.exceptions import RestaurantNotFoundException
 from domain.interface.restaurant_repository import RestaurantRepository
 from domain.models.Restaurant import Restaurant
 from config import settings
@@ -32,6 +33,8 @@ class RestaurantRepo(RestaurantRepository):
     def get(self, restaurant_id):
         session = Session(self.engine)
         restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
+        if not restaurant_db:
+            raise RestaurantNotFoundException()
         return Restaurant(**restaurant_db.__dict__)
 
     def save(self, restaurant: Restaurant) -> str:
@@ -46,6 +49,8 @@ class RestaurantRepo(RestaurantRepository):
     def update(self, restaurant: Restaurant, restaurant_id):
         session = Session(self.engine)
         restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
+        if not restaurant_db:
+            raise RestaurantNotFoundException()
         restaurant_db.rating = restaurant.rating
         restaurant_db.name = restaurant.name
         restaurant_db.site = restaurant.site
@@ -63,6 +68,8 @@ class RestaurantRepo(RestaurantRepository):
     def delete(self, restaurant_id: str):
         session = Session(self.engine)
         restaurant_db = session.query(RestaurantDb).filter_by(id=restaurant_id).first()
+        if not restaurant_db:
+            raise RestaurantNotFoundException()
         if restaurant_db:
             session.delete(restaurant_db)
             session.commit()

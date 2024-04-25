@@ -41,5 +41,5 @@ async def save_restaurant(request: SaveRestaurantRequestDataModel):
         return response
     except Exception:
         raise HTTPException(
-            status_code=404, detail='Error saving a new restaurant',
+            status_code=400, detail='Error saving a new restaurant',
         )
