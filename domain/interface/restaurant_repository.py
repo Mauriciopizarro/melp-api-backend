@@ -19,3 +19,7 @@ class RestaurantRepository(ABC):
     @abstractmethod
     def delete(self, restaurant_id: str):
         pass
+
+    @abstractmethod
+    def get_rest_by_lat_long_and_radius(self, latitude, longitude, radius):
+        pass
