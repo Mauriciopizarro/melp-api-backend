@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, EmailStr
 from application.services.update_restaurant_service import UpdateRestaurantService
+from domain.exceptions import RestaurantNotFoundException
 
 router = APIRouter()
 update_restaurant_service = UpdateRestaurantService()
@@ -39,7 +40,11 @@ async def update_restaurant(request: UpdateRestaurantRequestDataModel, restauran
             'restaurant_data': restaurant.dict()
         }
         return response
+    except RestaurantNotFoundException:
+        raise HTTPException(
+            status_code=404, detail='Restaurant not found',
+        )
     except Exception:
         raise HTTPException(
-            status_code=404, detail='Error updating a new restaurant',
+            status_code=400, detail='Error updating a new restaurant',
         )
